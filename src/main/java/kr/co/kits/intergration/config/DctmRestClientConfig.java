@@ -22,6 +22,7 @@ public class DctmRestClientConfig {
 	
 	@Bean
 	public DCTMRestClient dctmRestClient() {
+		DCTMRestClient client = DCTMRestClientBuilder.buildSilently(DCTMRestClientBinding.JSON, contextRoot, repository, username, password);
 		return DCTMRestClientBuilder.buildSilently(DCTMRestClientBinding.JSON, contextRoot, repository, username, password);
 	}
 }

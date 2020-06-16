@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import com.emc.documentum.rest.client.sample.client.DCTMRestClient;
 import com.emc.documentum.rest.client.sample.model.LinkRelation;
+import com.emc.documentum.rest.client.sample.model.RestObject;
 
 import kr.co.kits.intergration.model.Distribute;
 import kr.co.kits.intergration.service.support.DistributeServiceSupport;
@@ -19,9 +20,10 @@ import lombok.extern.log4j.Log4j2;
 public class DistributeService extends DistributeServiceSupport{
 
 	//for samsung e
-    public String requestHrefDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, String... params) {
+    public RestObject requestHrefDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, String... params) {
     	List<String> ses = new ArrayList<>();
     	ses.add("require-dc-write"); ses.add("true");
+    	ses.add("media-url-policy"); ses.add("dc-pref");
     	if(StringUtils.hasText(format)) {
     		ses.add("format"); ses.add(format);
     	}
@@ -37,21 +39,25 @@ public class DistributeService extends DistributeServiceSupport{
 			}
     	}
     	String[] arrayparams = ses.stream().toArray(String[]::new);
-    	if(log.isInfoEnabled()) {
-    		log.info("params = " + Arrays.toString(arrayparams) );
+    	if(log.isDebugEnabled()) {
+    		log.debug("params = " + Arrays.toString(arrayparams) );
     	}
     	if(StringUtils.hasText(username) && StringUtils.hasText(password)) {
     		 DCTMRestClient dctmRestUserClient = this.getDctmRestClientByUsernameAndPassword(username, password);
     		 // session check - spring session 
-    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, arrayparams).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, arrayparams);
     	}else {
     		
-    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName, arrayparams).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName, arrayparams);
     	}
     }
 
 	public String requestHrefDistributedUpload(Distribute d) {
-		return this.requestHrefDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(), d.getFormat(), d.getContentLength(), d.getCabinetName());
+		return this.requestHrefDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(), d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+	}
+	
+	public String requestObjectDistributedUpload(Distribute d) {
+		return this.requestHrefDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(), d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
 	}
 
 }

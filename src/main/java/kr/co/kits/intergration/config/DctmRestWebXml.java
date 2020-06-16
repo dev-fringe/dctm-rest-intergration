@@ -12,15 +12,22 @@ public class DctmRestWebXml extends AbstractAnnotationConfigDispatcherServletIni
 	}
 
 	protected String[] getServletMappings() {
-		return new String[] { "/" };
+		return new String[] { "/"};
 	}
 
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] {DctmRestCommonConfig.class,DctmRestContextInit.class, DctmRestRibbonLBConfig.class, DctmRestClientConfig.class, DctmRestMustachViewConfig.class, DctmRestSessionConfig.class, DctmRestSessionConfig.class};
+		return new Class<?>[] {
+			  DctmRestCommonConfig.class
+			, DctmRestContextInit.class
+			, DctmRestRibbonLBConfig.class
+			, DctmRestClientConfig.class
+			, DctmRestMustachViewConfig.class
+			, DctmRestSessionConfig.class
+		};
 	}
 
 	protected String getServletName() {
-	    return "bocs-servlet";
+	    return "dctm-rest-intergration-servlet";
 	}
 	
     protected Filter[] getServletFilters() {

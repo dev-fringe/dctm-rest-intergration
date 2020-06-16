@@ -13,7 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJdbcHttpSession
-public class DctmRestSessionConfig {
+public class DctmRestSessionConfig  {
 	@Bean
 	public EmbeddedDatabase dataSource() {
 		return new EmbeddedDatabaseBuilder() 

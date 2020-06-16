@@ -23,8 +23,8 @@ public class DistributeController {
 
 	private final DistributeService distributeService;
 	
-	@RequestMapping("/requestUploadHref")
-	public @ResponseBody Map<String, Object> requestUploadHref(
+	@RequestMapping("/distributed-upload-href")
+	public @ResponseBody Map<String, Object> distributedUploadHref(
 			  @RequestParam(name = "cabinet", required = true) String cabinetName
 			, @RequestParam(name = "object_name", required = true) String  objectName
 			, @RequestParam(name = "format", required = true) String format
@@ -34,11 +34,18 @@ public class DistributeController {
 			, @RequestParam(name = "password", required = false) String password
 			) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("distributed-upload", distributeService.requestHrefDistributedUpload(cabinetName, objectName, username, password, format, contentLength, networkLocation));
+		try {
+			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength, networkLocation, username, password)));
+			map.put("status","200");
+			map.put("message","OK");
+		}catch (Exception e) {
+			map.put("status","500");
+			map.put("message","Internal Server Error is : " + e.getMessage().toString());
+		}
 		return map;
 	}
 	
-	@RequestMapping("/requestHrefDistributedUpload")
+	@RequestMapping("/distributed-upload1")
 	public @ResponseBody Map<String, Object> requestHrefDistributedUpload(@Valid @RequestBody Distribute distribute) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("distributed-upload", distributeService.requestHrefDistributedUpload(distribute));

@@ -29,8 +29,10 @@ public class DistributeServiceTest {
 	@Test
 	@Order(1)
 	public void downloadfile_success_ie_pdf() throws Exception {
-		String test = service.requestHrefDistributedUpload(new Distribute());
-		System.out.println(test);
+//		String test = service.requestHrefkDistributedUpload(new Distribute());
+		String test2 = service.requestObjectDistributedUpload(new Distribute());
+		
+		System.out.println(test2);
 	}
 	
 }

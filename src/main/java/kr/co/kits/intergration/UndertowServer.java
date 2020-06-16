@@ -38,7 +38,7 @@ public class UndertowServer {
         servletBuilder.addServlet(servlet("h2-console-web", WebServlet.class).addMapping("/h2/*"));
         DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
         manager.deploy();
-        PathHandler path = Handlers.path(Handlers.redirect("/")).addPrefixPath("/", manager.start());
+        PathHandler path = Handlers.path(Handlers.redirect("/app/index.html")).addPrefixPath("/", manager.start());
         return Undertow.builder().addHttpListener(80, "0.0.0.0").setHandler(path).build();
     }
 }
