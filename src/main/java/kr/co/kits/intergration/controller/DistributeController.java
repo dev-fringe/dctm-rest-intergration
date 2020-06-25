@@ -48,7 +48,7 @@ public class DistributeController {
 	public @ResponseBody Map<String, Object> distributedUploadHref(@RequestParam(name = "username", required = false) String username,  HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			map.put("distributed-upload-complete", distributeService.requestHrefDistributedUploadComplete(new Distribute(username, session.getId())));
+			map.put("distributed-upload-complete", distributeService.requestHrefDistributedUploadComplete(new Distribute(username, session.getId()))); 
 			map.put("status","200");
 			map.put("message","OK");
 		}catch (Exception e) {
