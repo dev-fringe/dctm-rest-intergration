@@ -3,9 +3,6 @@ package kr.co.kits.intergration;
 import static io.undertow.servlet.Servlets.servlet;
 
 import java.io.File;
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +19,13 @@ import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ListenerInfo;
 import io.undertow.servlet.util.ImmediateInstanceFactory;
+import lombok.SneakyThrows;
 
 public class UndertowServer {
     
     @Bean(name = "undertow")
-    public Undertow undertow() throws ServletException, IOException {
+    @SneakyThrows
+    public Undertow undertow(){
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.setConfigLocation(Application.class.getPackage().getName()+".config");
         DeploymentInfo servletBuilder = Servlets.deployment().setClassLoader(this.getClass().getClassLoader())

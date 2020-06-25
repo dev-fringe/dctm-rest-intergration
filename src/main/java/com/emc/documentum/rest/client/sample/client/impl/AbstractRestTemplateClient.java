@@ -35,7 +35,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.concurrent.NotThreadSafe;
+//import javax.annotation.concurrent.NotThreadSafe;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.codec.binary.Base64;
@@ -98,7 +98,7 @@ import kr.co.kits.intergration.support.ApiRestLoggingRequestInterceptor;
 /**
  * the basic implementation with Spring RestTemplate
  */
-@NotThreadSafe
+//@NotThreadSafe
 public abstract class AbstractRestTemplateClient implements DCTMRestClient {
     protected static final String CSRF_HEADER_NAME_HEADER = "DOCUMENTUM-CSRF-HEADER-NAME";
     protected static final String CLIENT_TOKEN_NAME = "DOCUMENTUM-CLIENT-TOKEN";

@@ -1,6 +1,5 @@
 package kr.co.kits.intergration.support;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,13 +10,16 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.StreamUtils;
 
+import lombok.SneakyThrows;
+
 public class ApiRestLoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
 	private static final Logger requestLog = LogManager.getLogger("Request");
 	private static final Logger responseLog = LogManager.getLogger("Response");
 
 
-	private void log(HttpRequest request, byte[] body, ClientHttpResponse response, BufferingClientHttpResponseWrapper responseWrapper) throws IOException {
+	@SneakyThrows
+	private void log(HttpRequest request, byte[] body, ClientHttpResponse response, BufferingClientHttpResponseWrapper responseWrapper) {
 		if (requestLog.isInfoEnabled()) {
 			requestLog.info("request method: {}, request URI: {}, request headers: {}, request body: {}",
                     request.getMethod(),
@@ -33,13 +35,13 @@ public class ApiRestLoggingRequestInterceptor implements ClientHttpRequestInterc
                     request.getHeaders(),
                     new String(body, Charset.forName("UTF-8")),
                     response.getStatusCode(),
-                    response.getHeaders(),
+					response.getHeaders(),
                     new String(StreamUtils.copyToByteArray(responseWrapper.getBody()), Charset.forName("UTF-8")));
 		}
 	}
 	
-	    @Override
-	    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+	@SneakyThrows
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) {
 	        BufferingClientHttpResponseWrapper responseWrapper = null;
 	        ClientHttpResponse response = null;
 	        try {

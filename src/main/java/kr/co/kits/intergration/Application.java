@@ -8,10 +8,12 @@ import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.util.StringUtils;
 
 import io.undertow.Undertow;
+import lombok.SneakyThrows;
 
 @Import({UndertowServer.class})
 public class Application implements InitializingBean{
    
+	public static final String NAME = "rest-dctm-intergration";
 	@Autowired Undertow undertow;
 
 	public static class ApplicationProfile{
@@ -19,6 +21,7 @@ public class Application implements InitializingBean{
 		public static final String STG = "STG";
 		public static final String LOC = "LOC";
 		public static final String PRD = "PRD";
+		
 	}
 	
 	public Application() {
@@ -30,11 +33,13 @@ public class Application implements InitializingBean{
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	@SneakyThrows
+	public static void main(String[] args) {
     	new AnnotationConfigApplicationContext(Application.class);   
     }
 
-	public void afterPropertiesSet() throws Exception {
+	@SneakyThrows
+	public void afterPropertiesSet(){
 		undertow.start();
 	}
 }

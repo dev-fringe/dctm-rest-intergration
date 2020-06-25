@@ -3,11 +3,10 @@ package kr.co.kits.intergration.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +34,7 @@ public class DistributeController {
 			) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength, networkLocation, username, password)));
+			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength)));
 			map.put("status","200");
 			map.put("message","OK");
 		}catch (Exception e) {
@@ -44,11 +43,18 @@ public class DistributeController {
 		}
 		return map;
 	}
-	
-	@RequestMapping("/distributed-upload1")
-	public @ResponseBody Map<String, Object> requestHrefDistributedUpload(@Valid @RequestBody Distribute distribute) {
+
+	@RequestMapping("/distributed-upload-href-complete")
+	public @ResponseBody Map<String, Object> distributedUploadHref(@RequestParam(name = "username", required = false) String username,  HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("distributed-upload", distributeService.requestHrefDistributedUpload(distribute));
+		try {
+			map.put("distributed-upload-complete", distributeService.requestHrefDistributedUploadComplete(new Distribute(username, session.getId())));
+			map.put("status","200");
+			map.put("message","OK");
+		}catch (Exception e) {
+			map.put("status","500");
+			map.put("message","Internal Server Error is : " + e.getMessage().toString());
+		}
 		return map;
-	}	
+	}
 }

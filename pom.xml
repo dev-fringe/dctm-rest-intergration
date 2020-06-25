@@ -118,6 +118,12 @@
 	    <artifactId>spring-context</artifactId>
 	    <version>5.2.7.RELEASE</version>
 	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-orm</artifactId>
+	    <version>5.2.7.RELEASE</version>
+	</dependency>
 
 	<dependency>
 	    <groupId>org.springframework</groupId>
@@ -196,8 +202,135 @@
 	    <scope>system</scope>
 	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/rest-api-client-sample-16.4.jar</systemPath>
 	</dependency>
+<!-- 	<dependency> -->
+<!-- 	    <groupId>org.springframework.boot</groupId> -->
+<!-- 	    <artifactId>spring-boot</artifactId> -->
+<!-- 	    <version>2.3.1.RELEASE</version> -->
+<!-- 	</dependency> -->
+     <dependency>
+         <groupId>com.emc.documentum.dfc</groupId>
+         <artifactId>dfc</artifactId>
+         <version>7.2-20160710.203551-32</version>
+     </dependency>
+ 	 <dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>3.5.5</version>
+	 </dependency>
+	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis-spring</artifactId>
+	    <version>2.0.5</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.codehaus.groovy</groupId>
+	    <artifactId>groovy-all</artifactId>
+	    <version>3.0.4</version>
+	    <type>pom</type>
+	    <exclusions>
+	    	<exclusion>
+			    <groupId>com.sun</groupId>
+			    <artifactId>tools</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+			    <groupId>org.testng</groupId>
+			    <artifactId>testng</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-groovydoc</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-jmx</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-json</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-jsr223</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-swing</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-templates</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-test</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-servlet</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-nio</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-macro</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-xml</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-testng</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-groovysh</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-cli-picocli</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-datetime</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-test-junit5</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-sql</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-astbuilder</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-docgenerator</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-console</artifactId>
+	    	</exclusion>
+	    	<exclusion>
+	    		<groupId>org.codehaus.groovy</groupId>
+	    		<artifactId>groovy-ant</artifactId>
+	    	</exclusion>
+	    </exclusions>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-dbcp2</artifactId>
+	    <version>2.7.0</version>
+	</dependency>
+	
   </dependencies>
   <build>
+	<finalName>dctm-rest-intergration</finalName>  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -206,12 +339,18 @@
         <configuration>
          <source>1.8</source>
          <target>1.8</target>        
-          <encoding>UTF-8</encoding>
-          <verbose>true</verbose>
-          <fork>true</fork>
-          <compilerVersion>1.8</compilerVersion>
+         <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
-  </build>  
+  </build> 
+    <repositories>
+        <repository>
+            <id>com.emc.documentum.spring</id>
+            <url>https://raw.github.com/mmohen/mvn-repo/gh-pages</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>		
+    </repositories>   
 </project>

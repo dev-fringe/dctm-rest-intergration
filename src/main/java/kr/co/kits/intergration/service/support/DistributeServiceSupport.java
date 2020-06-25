@@ -1,7 +1,11 @@
 package kr.co.kits.intergration.service.support;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.emc.documentum.rest.client.sample.client.DCTMRestClient;
 import com.emc.documentum.rest.client.sample.client.DCTMRestClientBinding;
@@ -51,5 +55,9 @@ public class DistributeServiceSupport {
         RestObject cabinet = dctmRestClient.getCabinet(cabinetName);
         RestObject newObjectWithoutContent = new PlainRestObject("object_name", objectName);
         return dctmRestClient.createDocument(cabinet, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+    }
+    
+    public static HttpSession getSession(){
+    	return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession();
     }
 }
