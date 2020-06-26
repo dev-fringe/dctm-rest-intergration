@@ -1,10 +1,7 @@
 package kr.co.kits.intergration;
 
-import static io.undertow.servlet.Servlets.servlet;
-
 import java.io.File;
 
-import org.h2.server.web.WebServlet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -34,7 +31,7 @@ public class UndertowServer {
                 .addMapping("/").setLoadOnStartup(1))
 				.setResourceManager(new FileResourceManager(new File("src/main/webapp"), 1024))
                 .addListener(new ListenerInfo(ContextLoaderListener.class, new ImmediateInstanceFactory<>(new ContextLoaderListener(context))));
-        servletBuilder.addServlet(servlet("h2-console-web", WebServlet.class).addMapping("/h2/*"));
+//        servletBuilder.addServlet(servlet("h2-console-web", WebServlet.class).addMapping("/h2/*"));
         DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
         manager.deploy();
         PathHandler path = Handlers.path(Handlers.redirect("/app/index.html")).addPrefixPath("/", manager.start());

@@ -1,10 +1,8 @@
 package kr.co.kits.intergration.service;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -19,10 +17,5 @@ import kr.co.kits.intergration.config.InitDctmRestContext;
 @WebAppConfiguration
 public class HttpSessionServiceTest {
 
-	@Autowired SessionService service;
-	
-	@Test
-	public void session() throws Exception {
-	}
-	
+// nob	
 }
