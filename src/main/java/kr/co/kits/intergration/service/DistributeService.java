@@ -57,8 +57,8 @@ public class DistributeService extends DistributeServiceSupport{
     }
 
 	public String requestHrefDistributedUpload(Distribute d) {
-		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(), d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
-		if(StringUtils.hasText(href) && href.contains("http")) {
+		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(),d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+		if (StringUtils.hasText(href) && href.contains("http")) {
 			d.setHref(href);
 			getSession().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, Application.NAME);
 			d.setSessionId(getSession().getId());

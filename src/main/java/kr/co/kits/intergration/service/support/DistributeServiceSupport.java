@@ -24,12 +24,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DistributeServiceSupport {
 
-	@Autowired private DCTMRestClient dctmRestClient;
+	@Autowired DCTMRestClient dctmRestClient;
 	@Autowired FindByIndexNameSessionRepository<? extends Session> findByIndexNameSessionRepository;
-	@Value("${app.contextRoot}") private String contextRoot;
-	@Value("${app.repository}") private String repository;	
-    @Value("${app.session.seconds:1800}") Integer interval;
-    @Value("${app.session.size:50}") Integer sessionSize;
+	@Value("${app.contextRoot}") String contextRoot;
+	@Value("${app.repository}") String repository;
+	@Value("${app.session.seconds:1800}") Integer interval;
+	@Value("${app.session.size:50}")  Integer sessionSize;
     
     public boolean supported() {
     	return supported(this.dctmRestClient);
@@ -58,12 +58,12 @@ public class DistributeServiceSupport {
     public RestObject requestRestObjectForDistributeWrite(DCTMRestClient dctmRestClient, String cabinetName, String objectName, String... params) {
     	Integer appSessionSize = getSessionSize(Application.NAME);
     	log.info("this servlet session size is " + appSessionSize);
-		if(sessionSize <= appSessionSize) {
+		if (sessionSize <= appSessionSize) {
 			throw new Exception("sorry. The number of users on the current server has been exceeded.");
 		}
-        if(!supported(dctmRestClient)) {
+		if (!supported(dctmRestClient)) {
 			throw new Exception("The BOCS Write is not supported by the repository " + dctmRestClient.getRepository().getServers().get(0).getVersion().split("\\.")[0]);
-        }
+		}
         RestObject cabinet = dctmRestClient.getCabinet(cabinetName);
         RestObject newObjectWithoutContent = new PlainRestObject("object_name", objectName);
         return dctmRestClient.createDocument(cabinet, (RestObject)newObjectWithoutContent, (Object)null, null, params);
