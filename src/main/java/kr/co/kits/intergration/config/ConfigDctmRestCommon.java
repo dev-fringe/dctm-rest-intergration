@@ -48,6 +48,7 @@ public class ConfigDctmRestCommon implements InitializingBean{
 	
 	@Autowired Environment env;
 
+	
 	@Profile("LOC")
 	@Bean
 	public void loc() {
@@ -123,12 +124,20 @@ public class ConfigDctmRestCommon implements InitializingBean{
 		@Value("${app.jdbc.password}")
 		private String jdbcPassword;	
 		
-		@Value("${app.session.second:1800}")
+		@Value("${app.session.seconds:1800}")
 		private Integer maxInactiveIntervalInSeconds;
 
 		
+		public Integer getMaxInactiveIntervalInSeconds() {
+			return maxInactiveIntervalInSeconds;
+		}
+
+		public void setMaxInactiveIntervalInSeconds(Integer maxInactiveIntervalInSeconds) {
+			this.maxInactiveIntervalInSeconds = maxInactiveIntervalInSeconds;
+		}
+
 		@Bean
-		public DataSource  dataSource() {
+		public DataSource dataSource() {
 			BasicDataSource dataSource = new BasicDataSource();
 			dataSource.setDriverClassName(jdbcDriver);
 			dataSource.setUrl(jdbcUrl);
@@ -136,11 +145,6 @@ public class ConfigDctmRestCommon implements InitializingBean{
 			dataSource.setPassword(jdbcPassword);
 			return dataSource;
 		}
-
-		public void setMaxInactiveIntervalInSeconds(Integer maxInactiveIntervalInSeconds) {
-			this.maxInactiveIntervalInSeconds = maxInactiveIntervalInSeconds;
-		}
-		
 	}
 
 
@@ -159,8 +163,8 @@ public class ConfigDctmRestCommon implements InitializingBean{
 		return new DataSourceTransactionManager(dataSource); 
 	}
 	
-	@Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+	@Bean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		return sqlSessionFactoryBean.getObject();

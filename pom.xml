@@ -202,16 +202,11 @@
 	    <scope>system</scope>
 	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/rest-api-client-sample-16.4.jar</systemPath>
 	</dependency>
-<!-- 	<dependency> -->
-<!-- 	    <groupId>org.springframework.boot</groupId> -->
-<!-- 	    <artifactId>spring-boot</artifactId> -->
-<!-- 	    <version>2.3.1.RELEASE</version> -->
-<!-- 	</dependency> -->
-     <dependency>
-         <groupId>com.emc.documentum.dfc</groupId>
-         <artifactId>dfc</artifactId>
-         <version>7.2-20160710.203551-32</version>
-     </dependency>
+<!--      <dependency> -->
+<!--          <groupId>com.emc.documentum.dfc</groupId> -->
+<!--          <artifactId>dfc</artifactId> -->
+<!--          <version>7.2-20160710.203551-32</version> -->
+<!--      </dependency> -->
  	 <dependency>
 	    <groupId>org.mybatis</groupId>
 	    <artifactId>mybatis</artifactId>

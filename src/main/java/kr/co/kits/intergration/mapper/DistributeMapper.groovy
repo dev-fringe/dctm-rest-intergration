@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Insert
 import kr.co.kits.intergration.model.Distribute
 
 interface DistributeMapper {
-	
+
 	@Insert("""<script>
         insert into bulk_upload_req_log(
 	          cabinet
@@ -35,13 +35,13 @@ interface DistributeMapper {
 	</script>""")
 	void insertDistribute(Distribute distribute);
 
-//	@Select("""<script>
-//        select 
-//          city
-//        , name
-//        , address
-//        , zip
-//        from hotel where city = #{city}
-//	</script>""")
-//	Hotel selectByCityId(Hotel hotel);
+	//	@Select("""<script>
+	//        select
+	//          city
+	//        , name
+	//        , address
+	//        , zip
+	//        from hotel where city = #{city}
+	//	</script>""")
+	//	Hotel selectByCityId(Hotel hotel);
 }

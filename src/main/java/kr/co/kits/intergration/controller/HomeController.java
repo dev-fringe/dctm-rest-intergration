@@ -20,6 +20,7 @@ import com.emc.documentum.rest.client.sample.model.LinkRelation;
 import kr.co.kits.intergration.Application;
 import kr.co.kits.intergration.service.DistributeService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
 @AllArgsConstructor

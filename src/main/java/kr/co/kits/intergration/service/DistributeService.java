@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,8 +24,6 @@ import lombok.extern.log4j.Log4j2;
 public class DistributeService extends DistributeServiceSupport{
 
 	@Autowired DistributeMapper mapper;
-    @Autowired FindByIndexNameSessionRepository<? extends Session> findByIndexNameSessionRepository;
-    @Value("${app.session.size:10}") Integer maxSessionSize;
 	
 	//for samsung e
     public RestObject requestDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, String... params) {
@@ -61,20 +57,22 @@ public class DistributeService extends DistributeServiceSupport{
     }
 
 	public String requestHrefDistributedUpload(Distribute d) {
-		if(maxSessionSize <= findByIndexNameSessionRepository.findByPrincipalName(Application.NAME).values().size()) {
-			return "sorry. The number of users on the current server has been exceeded.";
-		}
 		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(), d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
-		d.setHref(href);
-		getSession().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, Application.NAME);
-		d.setSessionId(getSession().getId());
-		mapper.insertDistribute(d);
+		if(StringUtils.hasText(href) && href.contains("http")) {
+			d.setHref(href);
+			getSession().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, Application.NAME);
+			d.setSessionId(getSession().getId());
+			mapper.insertDistribute(d);
+		}
 		return href;
 	}
 	
 	public String requestHrefDistributedUploadComplete(Distribute d) {
-		getSession().invalidate();
+		log.info("session size is " + getSessionSize(Application.NAME));
+		d.setSessionId(getSession().getId());
 		mapper.insertDistribute(d);
+		getSession().invalidate();
+		log.info("session size is " + getSessionSize(Application.NAME));
 		return "success";
 	}
 
