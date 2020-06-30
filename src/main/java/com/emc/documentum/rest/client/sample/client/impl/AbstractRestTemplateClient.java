@@ -214,12 +214,19 @@ public abstract class AbstractRestTemplateClient implements DCTMRestClient {
     public String getCurrentRepositoryName() {
         return repositoryName;
     }
-
+    
+    private ClientHttpRequestFactory getClientHttpRequestFactory() {
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(15000);
+        clientHttpRequestFactory.setReadTimeout(10000);
+        return clientHttpRequestFactory;
+    }
+    
     protected void initRestTemplate(RestTemplate restTemplate) {
 //        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(1);
         interceptors.add(new ApiRestLoggingRequestInterceptor());
-        restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(),interceptors));
+        restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(getClientHttpRequestFactory(),interceptors));
         restTemplate.getMessageConverters().add(new MultipartBatchHttpMessageConverter());
     }
     
