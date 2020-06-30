@@ -100,13 +100,13 @@ public final class DCTMRestClientBuilder {
                    repository(repository).
                    useFormatExtension(useFormatExtension).
                    debug(debug).build();
-        client.getHomeDocument();
-        if(client.getMajorVersion() >= 7.2) {
-            client.enableCSRFClientToken(enableCSRFClientToken);
-            if(debug) {
-                Debug.debug("Enable CSRF Client Token=" + enableCSRFClientToken);
-            }
-        }
+//        client.getHomeDocument();
+//        if(client.getMajorVersion() >= 7.2) {
+//            client.enableCSRFClientToken(enableCSRFClientToken);
+//            if(debug) {
+//                Debug.debug("Enable CSRF Client Token=" + enableCSRFClientToken);
+//            }
+//        }
         return client;
     }
     
