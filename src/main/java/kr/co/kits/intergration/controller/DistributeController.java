@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.kits.intergration.model.Distribute;
+import kr.co.kits.intergration.model.Folder;
 import kr.co.kits.intergration.service.DistributeService;
 import lombok.AllArgsConstructor;
 
@@ -31,10 +32,12 @@ public class DistributeController {
 			, @RequestParam(name = "network-location", required = false) String networkLocation //Please input the network location used by the bocs
 			, @RequestParam(name = "username", required = false) String username
 			, @RequestParam(name = "password", required = false) String password
+			, @RequestParam(name = "folder", required = false) String folder
+			, @RequestParam(name = "subfolder", required = false) String subfolder
 			) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength)));
+			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength, new Folder(folder, subfolder))));
 			map.put("status","200");
 			map.put("message","OK");
 		}catch (Exception e) {

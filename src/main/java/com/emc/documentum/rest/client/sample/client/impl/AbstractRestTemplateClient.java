@@ -217,8 +217,8 @@ public abstract class AbstractRestTemplateClient implements DCTMRestClient {
     
     private ClientHttpRequestFactory getClientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(15000);
-        clientHttpRequestFactory.setReadTimeout(10000);
+        clientHttpRequestFactory.setConnectTimeout(60000);
+        clientHttpRequestFactory.setReadTimeout(60000);
         return clientHttpRequestFactory;
     }
     

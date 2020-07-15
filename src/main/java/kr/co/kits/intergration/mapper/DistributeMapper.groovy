@@ -19,6 +19,7 @@ interface DistributeMapper {
 			, creation_time
             , res_href
             , session_id
+            , tree
         ) values (
 	          #{cabinetName}
 	        , #{objectName}
@@ -31,6 +32,7 @@ interface DistributeMapper {
 	        , #{creationTime}
             , #{href}
             , #{sessionId}
+            , #{tree}
         )
 	</script>""")
 	void insertDistribute(Distribute distribute);

@@ -17,7 +17,6 @@ public class ApiRestLoggingRequestInterceptor implements ClientHttpRequestInterc
 	private static final Logger requestLog = LogManager.getLogger("Request");
 	private static final Logger responseLog = LogManager.getLogger("Response");
 
-
 	@SneakyThrows
 	private void log(HttpRequest request, byte[] body, ClientHttpResponse response, BufferingClientHttpResponseWrapper responseWrapper) {
 		if (requestLog.isInfoEnabled()) {

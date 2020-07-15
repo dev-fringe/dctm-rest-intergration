@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import kr.co.kits.intergration.config.ConfigDctmRestCommon;
 import kr.co.kits.intergration.config.InitDctmRestContext;
 import kr.co.kits.intergration.model.Distribute;
+import kr.co.kits.intergration.model.Folder;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ConfigDctmRestCommon.class}, initializers = InitDctmRestContext.class)
@@ -34,10 +35,20 @@ public class DistributeServiceTest {
 	    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 	}
 	@Test
-	public void downloadfile_success_ie_pdf() throws Exception {
-		String test2 = service.requestHrefDistributedUpload(new Distribute());
+	public void folderAndGetUploadACSHref() throws Exception {
+		Distribute d= new Distribute();
+		String t = "TESTAA";
+		String t2 = "TESTBB";
+		Folder f = new Folder(t, t2);
+//		f.setName("TEST55");
+//		Folder sb  = new Folder();
+//		sb.setName("TEST66");
+//		f.setFolder(sb);
+		d.setFolder(f); 
+		d.setObjectName("testfile1234");
+		String test2 = service.requestHrefDistributedUpload(d);
 		System.out.println(test2);
-		service.requestHrefDistributedUploadComplete(new Distribute(""));
+//		service.requestHrefDistributedUploadComplete(new Distribute(""));
 	}
 	
 }

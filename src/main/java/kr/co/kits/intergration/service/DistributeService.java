@@ -16,6 +16,7 @@ import com.emc.documentum.rest.client.sample.model.RestObject;
 import kr.co.kits.intergration.Application;
 import kr.co.kits.intergration.mapper.DistributeMapper;
 import kr.co.kits.intergration.model.Distribute;
+import kr.co.kits.intergration.model.Folder;
 import kr.co.kits.intergration.service.support.DistributeServiceSupport;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,8 +26,8 @@ public class DistributeService extends DistributeServiceSupport{
 
 	@Autowired DistributeMapper mapper;
 	
-	//for samsung e
-    public RestObject requestDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, String... params) {
+	//for samsung e 
+    public RestObject requestDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, Folder folder, String... params) {
     	List<String> ses = new ArrayList<>();
     	ses.add("require-dc-write"); ses.add("true");
     	ses.add("media-url-policy"); ses.add("dc-pref");
@@ -50,18 +51,20 @@ public class DistributeService extends DistributeServiceSupport{
     	}
     	if(StringUtils.hasText(username) && StringUtils.hasText(password)) {
     		 DCTMRestClient dctmRestUserClient = this.getDctmRestClientByUsernameAndPassword(username, password);
-    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, arrayparams);
+    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, folder, arrayparams);
     	}else {
-    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName, arrayparams);
+    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName,folder, arrayparams);
     	}
     }
 
+
 	public String requestHrefDistributedUpload(Distribute d) {
-		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(),d.getFormat(), d.getContentLength(), d.getNetworkLocation()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(),d.getFormat(), d.getContentLength(), d.getNetworkLocation(), d.getFolder()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
 		if (StringUtils.hasText(href) && href.contains("http")) {
 			d.setHref(href);
 			getSession().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, Application.NAME);
 			d.setSessionId(getSession().getId());
+			System.out.println(d);
 			mapper.insertDistribute(d);
 		}
 		return href;
