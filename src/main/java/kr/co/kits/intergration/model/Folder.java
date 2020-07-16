@@ -1,5 +1,7 @@
 package kr.co.kits.intergration.model;
 
+import org.springframework.util.StringUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,15 @@ public class Folder {
 	private Folder folder;
 	
 	public String toString() {
-		return name + "/" + folder;
+		if(folder != null) {
+			if(StringUtils.hasText(folder.getName())){
+				return name + "/" + folder;
+			}else {
+				return name;
+			}
+		}else {
+			return name  ;
+		}
 	}
 
 	public Folder(String folder, String subfolder) {
@@ -25,6 +35,8 @@ public class Folder {
 	}
 	public Folder(String folder) {
 		super();
-		this.name = folder;
+		if(folder != null) {
+			this.name = folder;
+		}
 	}
 }

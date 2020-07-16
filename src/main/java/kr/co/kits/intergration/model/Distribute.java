@@ -39,6 +39,8 @@ public class Distribute {
 	private String sessionId;
 	private Folder folder;
 	private String tree ="";
+	private String objectType;
+	private String itemsPerPage;
 	
 
 	public Distribute() {
@@ -105,4 +107,13 @@ public class Distribute {
 				+ ", password=" + password + ", type=" + type + ", href=" + href + ", creationTime=" + creationTime
 				+ ", sessionId=" + sessionId + ", folder=" + folder + ", tree=" + tree + "]";
 	}
+
+	public Distribute(String cabinetName, String objectName, String format, String contentLength, Folder folder,String objectType, String itemsPerPage) {
+		this(cabinetName, objectName, format,contentLength);
+		this.folder = folder;
+		this.setTree(folder);
+		this.objectType = objectType;
+		this.itemsPerPage = itemsPerPage;
+	}
+	
 }

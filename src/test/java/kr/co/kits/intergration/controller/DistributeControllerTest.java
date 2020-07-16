@@ -40,10 +40,11 @@ public class DistributeControllerTest {
 	public void distributedUpload() throws Exception {
 			MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/distributed-upload-href")
 						.param("cabinet", "Temp")
-						.param("object_name", "test_object1134")
+						.param("object_name", "test_object_hdoc123")
 						.param("format", "crtext")
-						.param("folder", "ABC")
-						.param("subfolder", "DEF")
+						.param("folder", "T2")
+//						.param("subfolder", "T3")
+						.param("r_object_type","h_arcdoc")
 						.param("content-length", "23")
 					).andDo(print())
 					.andExpect(status().isOk()).andReturn();		

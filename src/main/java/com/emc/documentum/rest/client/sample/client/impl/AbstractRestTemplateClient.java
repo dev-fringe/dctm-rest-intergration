@@ -791,11 +791,11 @@ public abstract class AbstractRestTemplateClient implements DCTMRestClient {
         }
     }
     
-    protected Feed feed(Linkable parent, LinkRelation rel, Class<? extends Feed> clazz, String... params) {
+    protected Feed<?> feed(Linkable parent, LinkRelation rel, Class<? extends Feed<?>> clazz, String... params) {
         return get(parent.getHref(rel), true, clazz, params);
     }
 
-    protected Feed feed(LinkRelation rel, Class<? extends Feed> clazz, String... params) {
+    protected Feed<?> feed(LinkRelation rel, Class<? extends Feed<?>> clazz, String... params) {
         return feed(getRepository(), rel, clazz, params);
     }
 

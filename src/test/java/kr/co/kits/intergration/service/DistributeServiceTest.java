@@ -38,7 +38,7 @@ public class DistributeServiceTest {
 	public void folderAndGetUploadACSHref() throws Exception {
 		Distribute d= new Distribute();
 		String t = "TESTAA";
-		String t2 = "TESTBB";
+		String t2 = "TESTCC";
 		Folder f = new Folder(t, t2);
 //		f.setName("TEST55");
 //		Folder sb  = new Folder();

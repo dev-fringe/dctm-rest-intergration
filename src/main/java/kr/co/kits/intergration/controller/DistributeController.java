@@ -34,10 +34,13 @@ public class DistributeController {
 			, @RequestParam(name = "password", required = false) String password
 			, @RequestParam(name = "folder", required = false) String folder
 			, @RequestParam(name = "subfolder", required = false) String subfolder
+			, @RequestParam(name = "r_object_type", required = false) String  rObjectType
+			, @RequestParam(name = "items-per-page", required = false) String itemsPerPage
+			
 			) {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength, new Folder(folder, subfolder))));
+			map.put("distributed-upload", distributeService.requestHrefDistributedUpload(new Distribute(cabinetName, objectName, format, contentLength, new Folder(folder, subfolder), rObjectType, itemsPerPage)));
 			map.put("status","200");
 			map.put("message","OK");
 		}catch (Exception e) {

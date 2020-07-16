@@ -2,12 +2,17 @@ package kr.co.kits.intergration.service.support;
 
 import static com.emc.documentum.rest.client.sample.model.LinkRelation.ENCLOSURE;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -57,12 +62,12 @@ public class DistributeServiceSupport {
 		return DCTMRestClientBuilder.buildSilently(DCTMRestClientBinding.JSON, contextRoot, repository, username, password);
     }
     
-    public RestObject requestRestObjectForDistributeWrite(String cabinetName, String objectName,Folder folder, String... params) {
+    public RestObject requestRestObjectForDistributeWrite(String cabinetName, String objectName,String objectType,String itemsPerPage, Folder folder, String... params) {
 //    	RestObject restObject = null;
 //    	synchronized (this.dctmRestClient) {// thread not safe 
 //    		restObject = this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName, params);
 //		}
-    	return this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName, folder, params);
+    	return this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName, objectType,itemsPerPage, folder, params);
     }
     
     public RestObject requestRestObjectForDistributeWrite(String cabinetName, String objectName, String... params) {
@@ -70,11 +75,11 @@ public class DistributeServiceSupport {
 //    	synchronized (this.dctmRestClient) {// thread not safe 
 //    		restObject = this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName, params);
 //		}
-    	return this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName, null, params);
+    	return this.requestRestObjectForDistributeWrite(this.dctmRestClient, cabinetName, objectName,null,null, null, params);
     }
     
     @SneakyThrows
-	public RestObject requestRestObjectForDistributeWrite(DCTMRestClient dctmRestUserClient, String cabinetName, String objectName, Folder folder, String... params) {
+	public RestObject requestRestObjectForDistributeWrite(DCTMRestClient dctmRestUserClient, String cabinetName, String objectName, String objectType,String itemsPerPage, Folder folder, String... params) {
     	Integer appSessionSize = getSessionSize(Application.NAME);
     	log.info("this servlet session size is " + appSessionSize);
 		if (sessionSize <= appSessionSize) {
@@ -84,43 +89,61 @@ public class DistributeServiceSupport {
 			throw new Exception("The BOCS Write is not supported by the repository " + dctmRestClient.getRepository().getServers().get(0).getVersion().split("\\.")[0]);
 		}
         RestObject cabinet = dctmRestClient.getCabinet(cabinetName);
-        RestObject newObjectWithoutContent = new PlainRestObject("object_name", objectName);
+    	List<String> properties = new ArrayList<>();
+    	if(StringUtils.hasText(objectName)) {
+    		properties.add("object_name"); properties.add(objectName);
+    	}
+    	if(StringUtils.hasText(objectType)) {
+    		properties.add("r_object_type"); properties.add(objectType);
+    	}
+    	String[] arrayparams = properties.stream().toArray(String[]::new);
+    	if(log.isDebugEnabled()) {
+    		log.debug("properties = " + Arrays.toString(arrayparams));
+    	}
+    	
+        RestObject newObjectWithoutContent = new PlainRestObject(arrayparams);
         if(folder == null || folder.getName() == null) {
         	return dctmRestClient.createDocument(cabinet, (RestObject)newObjectWithoutContent, (Object)null, null, params);
         }else {
-    		Object obj = folderService.createFolderOrGetFolderByCabinetName(cabinetName, folder.getName());
-    		if(obj instanceof RestObject) {
-    			Folder subFolder = folder.getFolder();
-    			if(subFolder != null && subFolder.getName() != null) {
-	    	        RestObject subFolderObject = new PlainRestObject("object_name", subFolder.getName());
-	    			RestObject restObject = folderService.createFolder((RestObject)obj, subFolderObject);
-	    			return dctmRestClient.createDocument(restObject, (RestObject)newObjectWithoutContent, (Object)null, null, params);
-    			}else{
-	    			return dctmRestClient.createDocument((RestObject)obj, (RestObject)newObjectWithoutContent, (Object)null, null, params);
-    				
-    			}
-    		}else if (obj instanceof Entry<?>) {
-      			Folder subFolder = folder.getFolder();
-    			if(subFolder != null && subFolder.getName() != null ) {
-	    			Object obj2 = folderService.createFolderOrGetFolderByEntry((Entry<?>)obj,  subFolder.getName());
-	    			if(obj2 instanceof RestObject) {
-		    			return dctmRestClient.createDocument((RestObject)obj2, (RestObject)newObjectWithoutContent, (Object)null, null, params);
-	    			}else if (obj2 instanceof Entry<?>) {
-	    				FolderLink movedLink = dctmRestClient.getFolderLink(((Entry)obj2).getContentSrc());
-		    			return dctmRestClient.createDocument(movedLink, (RestObject)newObjectWithoutContent, (Object)null, null, params);
-	    			}
-    			}else {
-    				FolderLink movedLink = dctmRestClient.getFolderLink(((Entry)obj).getContentSrc());
-	    			return dctmRestClient.createDocument(movedLink, (RestObject)newObjectWithoutContent, (Object)null, null, params);
-    			}
-    		}
+        	Object obj = folderService.isExistFolderByCabinetName(cabinetName, folder);
+        	if(obj != null) {
+        		FolderLink movedLink = dctmRestClient.getFolderLink(((Entry<?>)obj).getLinks().get(0).getHref());
+    			return dctmRestClient.createDocument(movedLink, (RestObject)newObjectWithoutContent, (Object)null, null, params);        		
+        	}else {
+        		Object obj2 = folderService.createFolderOrGetFolderByCabinetName(cabinetName, folder.getName());
+        		if(obj2 instanceof RestObject) {
+        			Folder subFolder = folder.getFolder();
+        			if(subFolder != null && subFolder.getName() != null) {
+        				RestObject restObject = folderService.createFolder((RestObject)obj2, subFolder.getName());
+        				return dctmRestClient.createDocument(restObject, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+        			}else{
+        				return dctmRestClient.createDocument((RestObject)obj2, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+        				
+        			}
+        		}else if (obj2 instanceof Entry<?>) {
+        			Folder subFolder = folder.getFolder();
+        			if(subFolder != null && subFolder.getName() != null ) {
+        				Object obj3 = folderService.createFolderOrGetFolderByEntry((Entry<?>)obj2, cabinetName, new Folder(folder.getName(), new Folder(subFolder.getName())), subFolder.getName());
+        				if(obj3 instanceof RestObject) {
+        					return dctmRestClient.createDocument((RestObject)obj3, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+        				}
+// dead code        		else if (obj3 instanceof Entry<?>) {
+//        					FolderLink movedLink = dctmRestClient.getFolderLink(((Entry<?>)obj3).getContentSrc());
+//        					return dctmRestClient.createDocument(movedLink, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+//        				}
+        			}else {
+        				FolderLink movedLink = dctmRestClient.getFolderLink(((Entry<?>)obj2).getContentSrc());
+        				return dctmRestClient.createDocument(movedLink, (RestObject)newObjectWithoutContent, (Object)null, null, params);
+        			}
+        		}
+        	}
         	return null;
         }
 	}
 
 	
     public RestObject requestRestObjectForDistributeWrite(DCTMRestClient dctmRestClient, String cabinetName, String objectName, String... params) {
-    	return this.requestRestObjectForDistributeWrite(dctmRestClient, cabinetName, objectName, null, params);
+    	return this.requestRestObjectForDistributeWrite(dctmRestClient, cabinetName, objectName,null, null, null, params);
     }
     
     public HttpSession getSession(){

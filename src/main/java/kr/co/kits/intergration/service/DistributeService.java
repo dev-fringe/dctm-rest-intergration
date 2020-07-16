@@ -27,7 +27,7 @@ public class DistributeService extends DistributeServiceSupport{
 	@Autowired DistributeMapper mapper;
 	
 	//for samsung e 
-    public RestObject requestDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, Folder folder, String... params) {
+    public RestObject requestDistributedUpload(String cabinetName, String objectName, String username, String password, String format, String contentLength, String networkLocation, Folder folder,String itemsPerPage, String objectType, String... params) {
     	List<String> ses = new ArrayList<>();
     	ses.add("require-dc-write"); ses.add("true");
     	ses.add("media-url-policy"); ses.add("dc-pref");
@@ -51,20 +51,20 @@ public class DistributeService extends DistributeServiceSupport{
     	}
     	if(StringUtils.hasText(username) && StringUtils.hasText(password)) {
     		 DCTMRestClient dctmRestUserClient = this.getDctmRestClientByUsernameAndPassword(username, password);
-    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, folder, arrayparams);
+    		 return this.requestRestObjectForDistributeWrite(dctmRestUserClient, cabinetName, objectName, objectType, itemsPerPage, folder, arrayparams);
     	}else {
-    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName,folder, arrayparams);
+    		return this.requestRestObjectForDistributeWrite(cabinetName, objectName, objectType, itemsPerPage, folder, arrayparams);
     	}
     }
 
 
 	public String requestHrefDistributedUpload(Distribute d) {
-		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(),d.getFormat(), d.getContentLength(), d.getNetworkLocation(), d.getFolder()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
+		String href = this.requestDistributedUpload(d.getCabinetName(), d.getObjectName(), d.getUsername(), d.getPassword(),d.getFormat(), d.getContentLength(), d.getNetworkLocation(), d.getFolder(), d.getItemsPerPage(), d.getObjectType()).getHref(LinkRelation.DISTRIBUTED_UPLOAD);
 		if (StringUtils.hasText(href) && href.contains("http")) {
 			d.setHref(href);
 			getSession().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, Application.NAME);
 			d.setSessionId(getSession().getId());
-			System.out.println(d);
+			log.info("Data is " + d);
 			mapper.insertDistribute(d);
 		}
 		return href;
